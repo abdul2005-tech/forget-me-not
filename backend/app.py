@@ -9,6 +9,7 @@ from models.user_model import User
 from routes.auth_routes import auth_bp
 from models.device_model import Device
 from routes.device_routes import device_bp
+from services.device_service import update_device_status
 
 app = Flask(__name__)
 
@@ -39,5 +40,6 @@ def home():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        update_device_status()
 
     app.run(debug=True)

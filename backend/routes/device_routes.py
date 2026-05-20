@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from models.device_model import Device
 from utils.db import db
+from datetime import datetime
 
 import random
 import string
@@ -76,4 +77,30 @@ def pair_device():
 
     return jsonify({
         "message": "Device paired successfully"
+    })
+@device_bp.route("/heartbeat", methods=["POST"])
+def heartbeat():
+
+    data = request.get_json()
+
+    device_uid = data.get("device_uid")
+
+    device = Device.query.filter_by(
+        device_uid=device_uid
+    ).first()
+
+    if not device:
+
+        return jsonify({
+            "error": "Device not found"
+        }), 404
+
+    device.is_online = True
+
+    device.last_seen = datetime.utcnow()
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Heartbeat received"
     })
