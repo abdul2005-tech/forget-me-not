@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { motion } from "framer-motion";
+
 import API from "../services/api";
 
 function Signup() {
@@ -14,6 +16,7 @@ function Signup() {
     });
 
     const handleChange = (e) => {
+
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -38,50 +41,173 @@ function Signup() {
         } catch (error) {
 
             alert(
-                error.response.data.error
+                error.response?.data?.error ||
+                "Signup failed"
             );
         }
     };
 
     return (
-        <div>
 
-            <h1>Signup</h1>
+        <div className="min-h-screen flex bg-slate-950 text-white">
 
-            <form onSubmit={handleSignup}>
+            {/* LEFT SECTION */}
 
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                    onChange={handleChange}
-                />
+            <div className="hidden lg:flex w-1/2 relative overflow-hidden items-center justify-center bg-gradient-to-br from-cyan-900 via-slate-900 to-slate-950">
 
-                <br />
+                <div className="absolute inset-0 opacity-20">
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    onChange={handleChange}
-                />
+                    <div className="absolute w-72 h-72 bg-cyan-500 rounded-full blur-3xl top-10 left-10"></div>
 
-                <br />
+                    <div className="absolute w-96 h-96 bg-blue-500 rounded-full blur-3xl bottom-10 right-10"></div>
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={handleChange}
-                />
+                </div>
 
-                <br />
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1 }}
+                    className="z-10 text-center px-10"
+                >
 
-                <button type="submit">
-                    Signup
-                </button>
+                    <h1 className="text-6xl font-bold mb-6">
 
-            </form>
+                        Join Forget Me Not
+
+                    </h1>
+
+                    <p className="text-xl text-slate-300 leading-relaxed">
+
+                        Build your smart ecosystem
+                        for tracking essentials using
+                        IoT + AI technology.
+
+                    </p>
+
+                </motion.div>
+
+            </div>
+
+            {/* RIGHT SECTION */}
+
+            <div className="flex flex-1 items-center justify-center px-6">
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.7 }}
+                    className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-2xl"
+                >
+
+                    <h2 className="text-4xl font-bold mb-2">
+
+                        Create Account
+
+                    </h2>
+
+                    <p className="text-slate-400 mb-8">
+
+                        Start your smart tracking journey today.
+
+                    </p>
+
+                    {/* FORM */}
+
+                    <form onSubmit={handleSignup}>
+
+                        {/* NAME */}
+
+                        <div className="mb-5">
+
+                            <label className="block mb-2 text-sm text-slate-300">
+
+                                Full Name
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Enter your name"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+
+                        </div>
+
+                        {/* EMAIL */}
+
+                        <div className="mb-5">
+
+                            <label className="block mb-2 text-sm text-slate-300">
+
+                                Email
+
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+
+                        </div>
+
+                        {/* PASSWORD */}
+
+                        <div className="mb-6">
+
+                            <label className="block mb-2 text-sm text-slate-300">
+
+                                Password
+
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+
+                        </div>
+
+                        {/* BUTTON */}
+
+                        <button
+                            type="submit"
+                            className="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-700 transition-all duration-300 font-semibold text-lg"
+                        >
+
+                            Create Account
+
+                        </button>
+
+                    </form>
+
+                    {/* LOGIN */}
+
+                    <p className="text-center text-slate-400 mt-6">
+
+                        Already have an account?
+
+                        <span
+                            onClick={() => navigate("/")}
+                            className="text-cyan-400 cursor-pointer ml-2 hover:text-cyan-300"
+                        >
+
+                            Login
+
+                        </span>
+
+                    </p>
+
+                </motion.div>
+
+            </div>
 
         </div>
     );

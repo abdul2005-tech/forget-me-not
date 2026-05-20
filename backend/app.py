@@ -11,6 +11,7 @@ from models.device_model import Device
 from routes.device_routes import device_bp
 from services.device_service import update_device_status
 from routes.rfid_routes import rfid_bp
+from routes.item_routes import item_bp
 
 app = Flask(__name__)
 
@@ -34,6 +35,10 @@ app.register_blueprint(
     url_prefix="/api/device"
 )
 app.register_blueprint(rfid_bp, url_prefix="/api/rfid")
+app.register_blueprint(
+    item_bp,
+    url_prefix="/api/items"
+)
 
 @app.route("/")
 def home():
