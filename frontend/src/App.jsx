@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ConnectDevice from "./pages/ConnectDevice";
 
 function App() {
 
@@ -32,6 +33,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/connect-device"
+          element={
+            <ProtectedRoute>
+              <ConnectDevice />
             </ProtectedRoute>
           }
         />
