@@ -7,5 +7,5 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
-    SQLALCHEMY_DATABASE_URI = os.getenv("SUPABASE_DB_URI")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DIRECT_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
