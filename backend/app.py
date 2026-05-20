@@ -5,6 +5,8 @@ from flask_jwt_extended import JWTManager
 from config import Config
 from utils.db import db
 
+from models.user_model import User
+
 app = Flask(__name__)
 
 app.config.from_object(Config)
