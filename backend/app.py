@@ -7,6 +7,8 @@ from utils.db import db
 
 from models.user_model import User
 from routes.auth_routes import auth_bp
+from models.device_model import Device
+from routes.device_routes import device_bp
 
 app = Flask(__name__)
 
@@ -17,7 +19,10 @@ CORS(app, supports_credentials=True)
 jwt = JWTManager(app)
 
 db.init_app(app)
-app.register_blueprint(auth_bp, url_prefix="/api/auth")
+app.register_blueprint(
+    device_bp,
+    url_prefix="/api/device"
+)
 
 @app.route("/")
 def home():
