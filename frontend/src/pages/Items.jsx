@@ -5,28 +5,35 @@ import {
 
 import DashboardLayout from "../components/DashboardLayout";
 
+import { useEffect, useState } from "react";
+
+import API from "../services/api";
+
 function Items() {
 
-    const items = [
-        {
-            id: 1,
-            name: "Keychain",
-            status: "SAFE",
-            lastSeen: "2 mins ago"
-        },
-        {
-            id: 2,
-            name: "Wallet",
-            status: "MISSING",
-            lastSeen: "3 hours ago"
-        },
-        {
-            id: 3,
-            name: "Bottle",
-            status: "SAFE",
-            lastSeen: "Just now"
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+
+        fetchItems();
+
+    }, []);
+
+    const fetchItems = async () => {
+
+        try {
+
+            const response = await API.get(
+                "/items/"
+            );
+
+            setItems(response.data);
+
+        } catch (error) {
+
+            console.log(error);
         }
-    ];
+    };
 
     return (
 
@@ -73,7 +80,7 @@ function Items() {
 
                                 <div>
 
-                                    {item.status === "SAFE" ? (
+                                    {item.item_status === "SAFE" ? (
 
                                         <span className="text-green-400 font-semibold">
 
@@ -99,16 +106,27 @@ function Items() {
 
                             <h2 className="text-3xl font-bold mb-3">
 
-                                {item.name}
+                                {item.item_name}
 
                             </h2>
+
+                            <p className="text-slate-400 mb-2">
+
+                                RFID UID:
+                                <span className="ml-2 text-white">
+
+                                    {item.rfid_uid}
+
+                                </span>
+
+                            </p>
 
                             <p className="text-slate-400">
 
                                 Last scanned:
                                 <span className="ml-2 text-white">
 
-                                    {item.lastSeen}
+                                    {item.last_scanned || "Never"}
 
                                 </span>
 
