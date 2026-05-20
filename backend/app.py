@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 
-CORS(app)
+CORS(app, supports_credentials=True)
 
 jwt = JWTManager(app)
 
