@@ -8,78 +8,107 @@ import bcrypt
 
 auth_bp = Blueprint("auth", __name__)
 
-# SIGNUP API
+
+# SIGNUP
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
 
-    data = request.get_json()
+    try:
 
-    name = data.get("name")
-    email = data.get("email")
-    password = data.get("password")
+        data = request.get_json()
 
-    # Check if user already exists
-    existing_user = User.query.filter_by(email=email).first()
+        name = data.get("name")
+        email = data.get("email")
+        password = data.get("password")
 
-    if existing_user:
+        # Check existing user
+        existing_user = User.query.filter_by(
+            email=email
+        ).first()
+
+        if existing_user:
+
+            return jsonify({
+                "error": "User already exists"
+            }), 400
+
+        # Hash password
+        hashed_password = bcrypt.hashpw(
+            password.encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8")
+
+        # Create user
+        new_user = User(
+            name=name,
+            email=email,
+            password_hash=hashed_password
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
         return jsonify({
-            "error": "User already exists"
-        }), 400
+            "message": "Signup successful"
+        }), 201
 
-    # Hash password
-    hashed_password = bcrypt.hashpw(
-        password.encode("utf-8"),
-        bcrypt.gensalt()
-    )
+    except Exception as e:
 
-    # Create new user
-    new_user = User(
-        name=name,
-        email=email,
-        password_hash=hashed_password.decode("utf-8")
-    )
+        print("SIGNUP ERROR:")
+        print(e)
 
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({
-        "message": "User created successfully"
-    }), 201
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 
-# LOGIN API
+# LOGIN
 @auth_bp.route("/login", methods=["POST"])
 def login():
 
-    data = request.get_json()
+    try:
 
-    email = data.get("email")
-    password = data.get("password")
+        data = request.get_json()
 
-    # Find user
-    user = User.query.filter_by(email=email).first()
+        email = data.get("email")
+        password = data.get("password")
 
-    if not user:
+        user = User.query.filter_by(
+            email=email
+        ).first()
+
+        if not user:
+
+            return jsonify({
+                "error": "Invalid credentials"
+            }), 401
+
+        password_correct = bcrypt.checkpw(
+            password.encode("utf-8"),
+            user.password_hash.encode("utf-8")
+        )
+
+        if not password_correct:
+
+            return jsonify({
+                "error": "Invalid credentials"
+            }), 401
+
+        access_token = create_access_token(
+            identity=str(user.id)
+        )
+
         return jsonify({
-            "error": "Invalid email or password"
-        }), 401
+            "message": "Login successful",
+            "token": access_token,
+            "user": user.to_dict()
+        }), 200
 
-    # Check password
-    password_correct = bcrypt.checkpw(
-        password.encode("utf-8"),
-        user.password_hash.encode("utf-8")
-    )
+    except Exception as e:
 
-    if not password_correct:
+        print("LOGIN ERROR:")
+        print(e)
+
         return jsonify({
-            "error": "Invalid email or password"
-        }), 401
-
-    # Generate JWT token
-    access_token = create_access_token(identity=user.id)
-
-    return jsonify({
-        "message": "Login successful",
-        "token": access_token,
-        "user": user.to_dict()
-    }), 200
+            "error": str(e)
+        }), 500
