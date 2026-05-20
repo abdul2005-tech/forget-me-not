@@ -10,6 +10,7 @@ from routes.auth_routes import auth_bp
 from models.device_model import Device
 from routes.device_routes import device_bp
 from services.device_service import update_device_status
+from routes.rfid_routes import rfid_bp
 
 app = Flask(__name__)
 
@@ -32,6 +33,7 @@ app.register_blueprint(
     device_bp,
     url_prefix="/api/device"
 )
+app.register_blueprint(rfid_bp, url_prefix="/api/rfid")
 
 @app.route("/")
 def home():
@@ -42,4 +44,4 @@ if __name__ == "__main__":
         db.create_all()
         update_device_status()
 
-    app.run(debug=True)
+    app.run(debug=True,host="0.0.0.0")
