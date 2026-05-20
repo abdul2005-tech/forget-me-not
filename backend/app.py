@@ -14,7 +14,7 @@ from routes.rfid_routes import rfid_bp
 
 app = Flask(__name__)
 
-app.config.from_object(Config)
+app.config.from_object("config.Config")
 
 CORS(
     app,
