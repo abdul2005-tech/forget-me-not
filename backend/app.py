@@ -14,7 +14,11 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 
-CORS(app, supports_credentials=True)
+CORS(
+    app,
+    resources={r"/*": {"origins": "*"}},
+    supports_credentials=True
+)
 
 jwt = JWTManager(app)
 
